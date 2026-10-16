@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Royale Digital Hub — Prototype</title>
+    <style>
+         :root {
+            --blue: #527eaa;
+            --blue2: #8fb4dc;
+            --pale: #e5f1fb;
+            --bg: #f7faff;
+            --ink: #172331;
+            --muted: #64748b;
+            --line: #d7e0e8;
+            --white: #fff;
+            --shadow: 0 5px 12px #1e293b20
+        }
+        
+        * {
+            box-sizing: border-box
+        }
+        
+        body {
+            margin: 0;
+            background: #c9c9c9;
+            color: var(--ink);
+            font: 15px/1.45 Inter, Segoe UI, Arial, sans-serif
+        }
+        
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit
+        }
+        
+        button {
+            cursor: pointer
+        }
+        
+        .shell {
+            width: min(1440px, 96vw);
+            min-height: calc(100vh - 36px);
+            margin: 18px auto;
+            background: var(--bg);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            position: relative
+        }
+        
+        .topbar {
+            height: 76px;
+            background: white;
+            border-bottom: 1px solid #d9dee5;
+            box-shadow: 0 2px 4px #0001;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            padding: 0 34px;
+            position: sticky;
+            top: 0;
+            z-index: 5
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 245px;
+            cursor: pointer
+        }
+        
+        .cap {
+            font-size: 38px;
+            color: var(--blue);
+            line-height: 1
+        }
+        
+        .brand b {
+            display: block;
+            font-size: 12px;
+            color: var(--blue);
+            line-height: 1.1
+        }
+        
+        .brand strong {
+            display: block;
+            font-size: 15px;
+            line-height: 1.1;
+            color: #111
+        }
+        
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+        
+        .nav button,
+        .iconbtn {
+            border: 0;
+            background: transparent;
+            padding: 10px 17px;
+            border-radius: 24px;
+            color: #111
+        }
+        
+        .nav button.active,
+        .nav button:hover {
+            background: var(--blue2);
+            color: white
+        }
+        
+        .search {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f8fbff;
+            border: 1px solid #c7d0d9;
+            border-radius: 22px;
+            padding: 8px 13px;
+            min-width: 200px;
+            box-shadow: 0 2px 4px #0002
+        }
+        
+        .search input {
+            border: 0;
+            outline: 0;
+            background: transparent;
+            width: 100%;
+            min-width: 70px;
+            font-size: 13px
+        }
+        
+        .iconbtn {
+            font-size: 22px;
+            padding: 7px;
+            position: relative
+        }
+        
+        .dot {
+            position: absolute;
+            right: 5px;
+            top: 4px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #e05d5d
+        }
+        
+        .layout {
+            display: flex;
+            flex: 1;
+            min-height: 560px
+        }
+        
+        .sidebar {
+            width: 235px;
+            flex-shrink: 0;
+            background: var(--pale);
+            padding: 20px 16px;
+            display: none
+        }
+        
+        .sidebar.show {
+            display: block
+        }
+        
+        .sidebrand {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin: 0 0 25px 4px
+        }
+        
+        .sidebrand .cap {
+            font-size: 34px;
+            color: #111
+        }
+        
+        .sidebrand b {
+            color: var(--blue);
+            display: block
+        }
+        
+        .sidebrand small {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: #111
+        }
+        
+        .menu {
+            display: grid;
+            gap: 7px
+        }
+        
+        .menu button {
+            border: 0;
+            text-align: left;
+            background: var(--blue);
+            color: white;
+            padding: 9px 13px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px #0002
+        }
+        
+        .menu button:hover,
+        .menu button.active {
+            background: var(--blue2)
+        }
+        
+        main {
+            flex: 1;
+            padding: 24px 4.5%;
+            min-width: 0
+        }
+        
+        .footer {
+            background: var(--blue);
+            color: white;
+            text-align: center;
+            padding: 13px 10px;
+            margin-top: auto
+        }
+        
+        .hero {
+            background: #e4f1fc;
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 24px 5%;
+            min-height: 220px;
+            position: relative;
+            margin-bottom: 24px
+        }
+        
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: white;
+            border-radius: 20px;
+            padding: 5px 14px;
+            box-shadow: 0 2px 4px #0002;
+            font-weight: 700
+        }
+        
+        .hero h2 {
+            font-size: 25px;
+            font-style: italic;
+            color: #104d83;
+            margin: 17px 0 0
+        }
+        
+        .hero p {
+            font-weight: 700;
+            font-size: 17px;
+            margin: 0 0 18px
+        }
+        
+        .primary {
+            border: 0;
+            border-radius: 12px;
+            background: var(--blue);
+            color: white;
+            padding: 11px 17px;
+            font-weight: 700;
+            box-shadow: 0 3px 5px #0002
+        }
+        
+        .primary:hover {
+            background: #3f6c99
+        }
+        
+        .round {
+            border: 0;
+            background: #05090d;
+            color: white;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            font-weight: bold
+        }
+        
+        .hero .left {
+            position: absolute;
+            left: 16px;
+            top: 45%
+        }
+        
+        .hero .right {
+            position: absolute;
+            right: 16px;
+            top: 45%
+        }
+        
+        .dots {
+            text-align: center;
+            color: var(--blue2);
+            letter-spacing: 7px;
+            margin-top: 5px
+        }
+        
+        .section-title {
+            font-size: 18px;
+            margin: 18px 0 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+        
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px
+        }
+        
+        .card {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+            min-width: 0
+        }
+        
+        .card h3 {
+            font-size: 17px;
+            margin: 0 0 7px
+        }
+        
+        .card p {
+            font-size: 13px;
+            color: #344154;
+            margin: 0 0 18px
+        }
+        
+        .cardfoot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto
+        }
+        
+        .link {
+            border: 0;
+            background: transparent;
+            color: #064e88;
+            font-weight: 700;
+            padding: 0
+        }
+        
+        .pagehead {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px
+        }
+        
+        .pagehead h1 {
+            font-size: 23px;
+            margin: 0
+        }
+        
+        .muted {
+            color: var(--muted)
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 20px
+        }
+        
+        .stat {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 17px;
+            box-shadow: 0 3px 8px #0000000b
+        }
+        
+        .stat small {
+            color: var(--muted);
+            display: block
+        }
+        
+        .stat strong {
+            font-size: 27px;
+            display: block;
+            margin: 5px 0;
+            color: var(--blue)
+        }
+        
+        .grid2 {
+            display: grid;
+            grid-template-columns: 1.15fr .85fr;
+            gap: 18px
+        }
+        
+        .listrow {
+            padding: 12px 0;
+            border-bottom: 1px solid #e6ebf0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px
+        }
+        
+        .listrow:last-child {
+            border-bottom: 0
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #e3f3e9;
+            color: #1b7540;
+            border-radius: 20px;
+            padding: 4px 9px;
+            font-size: 12px;
+            font-weight: 700
+        }
+        
+        .badge.pending {
+            background: #fff1d6;
+            color: #936313
+        }
+        
+        .badge.release {
+            background: #e2edff;
+            color: #245b9d
+        }
+        
+        .badge.absent {
+            background: #ffe4e4;
+            color: #ad3030
+        }
+        
+        .formrow {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px
+        }
+        
+        .field {
+            display: grid;
+            gap: 5px;
+            margin-bottom: 12px
+        }
+        
+        .field label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #445164
+        }
+        
+        .field input,
+        .field select,
+        .field textarea {
+            border: 1px solid #cbd5df;
+            border-radius: 9px;
+            padding: 10px;
+            background: white;
+            outline-color: var(--blue2);
+            width: 100%
+        }
+        
+        .field textarea {
+            min-height: 90px;
+            resize: vertical
+        }
+        
+        .tablewrap {
+            overflow: auto
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white
+        }
+        
+        th,
+        td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #e6ebf0;
+            white-space: nowrap
+        }
+        
+        th {
+            background: #edf5fc;
+            font-size: 13px;
+            color: #3f5268
+        }
+        
+        td {
+            font-size: 14px
+        }
+        
+        .empty {
+            padding: 28px;
+            text-align: center;
+            color: var(--muted)
+        }
+        
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 6px
+        }
+        
+        .day {
+            min-height: 68px;
+            border: 1px solid var(--line);
+            border-radius: 9px;
+            background: white;
+            padding: 7px;
+            font-size: 12px
+        }
+        
+        .day b {
+            display: block;
+            font-size: 13px
+        }
+        
+        .day.event {
+            background: #e7f2ff;
+            border-color: #91b9e0
+        }
+        
+        .day span {
+            display: block;
+            color: #245b91;
+            margin-top: 5px;
+            font-size: 10px
+        }
+        
+        .modalback {
+            position: fixed;
+            inset: 0;
+            background: #0b1728a6;
+            z-index: 20;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px
+        }
+        
+        .modalback.open {
+            display: flex
+        }
+        
+        .modal {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            width: min(440px, 100%);
+            box-shadow: 0 20px 60px #0003
+        }
+        
+        .modal h2 {
+            margin: 0 0 5px
+        }
+        
+        .modal .close {
+            float: right;
+            border: 0;
+            background: #eef3f8;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px
+        }
+        
+        .rolebuttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 9px;
+            margin: 20px 0
+        }
+        
+        .rolebuttons button {
+            border: 1px solid var(--line);
+            background: #f4f8fc;
+            border-radius: 12px;
+            padding: 13px 5px;
+            font-weight: 700;
+            color: #335d85
+        }
+        
+        .rolebuttons button.selected {
+            background: var(--blue);
+            color: white
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #172331;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            z-index: 30;
+            display: none
+        }
+        
+        .toast.show {
+            display: block
+        }
+        
+        .mobilemenu {
+            display: none
+        }
+        
+        .hidden {
+            display: none!important
+        }
+        
+        @media(max-width:900px) {
+            .topbar {
+                padding: 0 16px;
+                gap: 8px
+            }
+            .brand {
+                min-width: unset;
+                margin-right: auto
+            }
+            .nav {
+                display: none
+            }
+            .search {
+                margin-left: 0;
+                min-width: 120px
+            }
+            .sidebar {
+                width: 205px
+            }
+            .cards {
+                grid-template-columns: repeat(2, minmax(0, 1fr))
+            }
+            .stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr))
+            }
+            main {
+                padding: 22px 3%
+            }
+        }
+        
+        @media(max-width:620px) {
+            .shell {
+                width: 100%;
+                margin: 0;
+                min-height: 100vh
+            }
+            .topbar {
+                height: auto;
+                min-height: 70px;
+                flex-wrap: wrap;
+                padding: 12px
+            }
+            .brand .cap {
+                font-size: 30px
+            }
+            .brand strong {
+                font-size: 13px
+            }
+            .search {
+                order: 3;
+                width: 100%;
+                flex-basis: 100%
+            }
+            .layout {
+                display: block
+            }
+            .sidebar.show {
+                width: 100%;
+                padding: 12px
+            }
+            .sidebrand {
+                display: none
+            }
+            .menu {
+                grid-template-columns: repeat(2, minmax(0, 1fr))
+            }
+            .menu button {
+                font-size: 13px
+            }
+            .cards,
+            .grid2,
+            .formrow {
+                grid-template-columns: 1fr
+            }
+            .stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr))
+            }
+            main {
+                padding: 18px 14px
+            }
+            .hero {
+                padding: 20px 30px
+            }
+            .hero h2 {
+                font-size: 21px
+            }
+            .hero p {
+                font-size: 15px
+            }
+            .hero .left {
+                left: 7px
+            }
+            .hero .right {
+                right: 7px
+            }
+            .pagehead {
+                align-items: flex-start;
+                flex-direction: column
+            }
+            .calendar {
+                gap: 3px
+            }
+            .day {
+                min-height: 54px;
+                padding: 4px;
+                font-size: 10px
+            }
+            .day span {
+                font-size: 9px
+            }
+            .iconbtn {
+                font-size: 20px
+            }
+        }
+        /* Revision: refined navy-and-blue visual system */
+        
+         :root {
+            --blue: #4d79a6;
+            --blue2: #8db3dc;
+            --pale: #e7f1fb;
+            --bg: #f6f9fd;
+            --ink: #182b40;
+            --muted: #64758a;
+            --line: #d8e2ed;
+            --shadow: 0 7px 18px rgba(20, 45, 75, .12)
+        }
+        
+        body {
+            background: #dce4ed;
+            color: var(--ink)
+        }
+        
+        .shell {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 16px 42px rgba(18, 39, 64, .18)
+        }
+        
+        .topbar {
+            background: linear-gradient(100deg, #fff 0%, #f8fbff 100%);
+            border-bottom: 1px solid #d6e0eb
+        }
+        
+        .brand .cap {
+            filter: drop-shadow(0 2px 2px #527eaa22)
+        }
+        
+        .iconbtn {
+            background: #173b60;
+            color: #fff;
+            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+            box-shadow: 0 3px 7px #173b6025
+        }
+        
+        .iconbtn:hover {
+            background: #285781;
+            color: #fff
+        }
+        
+        .logout-btn {
+            border: 0;
+            border-radius: 10px;
+            background: #173b60;
+            color: #fff;
+            padding: 10px 13px;
+            font-weight: 700;
+            box-shadow: 0 3px 7px #173b6025
+        }
+        
+        .logout-btn:hover {
+            background: #285781
+        }
+        
+        .primary {
+            background: linear-gradient(135deg, #527fae, #355f8b);
+            box-shadow: 0 4px 9px rgba(42, 81, 122, .22);
+            transition: transform .15s, box-shadow .15s
+        }
+        
+        .primary:hover {
+            background: #284f78;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 13px rgba(42, 81, 122, .25)
+        }
+        
+        .menu button {
+            background: #527fae;
+            box-shadow: 0 3px 6px rgba(25, 56, 88, .15);
+            transition: background .15s, transform .15s
+        }
+        
+        .menu button:hover,
+        .menu button.active {
+            background: #173b60;
+            transform: translateX(2px)
+        }
+        
+        .card,
+        .stat {
+            box-shadow: 0 5px 14px rgba(22, 47, 75, .08);
+            transition: box-shadow .18s, transform .18s
+        }
+        
+        .cards .card:hover {
+            box-shadow: 0 9px 22px rgba(22, 47, 75, .14);
+            transform: translateY(-2px)
+        }
+        
+        .hero {
+            background: linear-gradient(120deg, #e5f2ff, #d8eafa);
+            box-shadow: 0 8px 18px rgba(22, 47, 75, .13)
+        }
+        
+        .pill {
+            color: #173b60
+        }
+        
+        .round {
+            background: #173b60;
+            color: #fff;
+            box-shadow: 0 3px 6px #173b6022
+        }
+        
+        .round:hover {
+            background: #527fae
+        }
+        
+        .badge {
+            background: #e1f4e9;
+            color: #216842
+        }
+        
+        .badge.pending {
+            background: #fff0d4;
+            color: #875b10
+        }
+        
+        .badge.release {
+            background: #e0edff;
+            color: #245b9d
+        }
+        
+        .section-title {
+            color: #173b60
+        }
+        
+        .modal {
+            border: 1px solid #dbe5ef;
+            box-shadow: 0 24px 70px #102a462b
+        }
+        
+        .rolebuttons button.selected {
+            background: #173b60
+        }
+        
+        .rolebuttons button {
+            color: #254f79
+        }
+        
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            border-color: #6e9bc9;
+            box-shadow: 0 0 0 3px #8db3dc35
+        }
+        
+        .calendar {
+            touch-action: pan-y;
+            user-select: none
+        }
+        
+        .day {
+            cursor: pointer;
+            transition: background .15s, border .15s
+        }
+        
+        .day:hover {
+            background: #edf6ff;
+            border-color: #82abd3
+        }
+        
+        .day.selected {
+            outline: 2px solid #527fae;
+            background: #dcecff
+        }
+        
+        .month-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+        
+        .month-controls button {
+            border: 1px solid #d3dfeb;
+            border-radius: 9px;
+            background: #fff;
+            color: #173b60;
+            padding: 7px 11px
+        }
+        
+        .profile-avatar {
+            width: 104px;
+            height: 104px;
+            border-radius: 50%;
+            background: #dcecff;
+            color: #315f8d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            border: 4px solid white;
+            box-shadow: 0 3px 12px #173b6022;
+            overflow: hidden
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+        
+        .inline-note {
+            background: #eef6ff;
+            border-left: 4px solid #527fae;
+            padding: 12px 14px;
+            border-radius: 8px;
+            color: #365675;
+            font-size: 13px
+        }
+        
+        @media(max-width:620px) {
+            .logout-btn {
+                padding: 8px 10px;
+                font-size: 12px
+            }
+            .iconbtn {
+                width: 35px;
+                height: 35px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="shell">
+        <header class="topbar">
+            <div class="brand" onclick="goHome()" title="Back to Home">
+                <div class="cap">🎓</div>
+                <div><b>EL ROYALE</b><strong>DIGITAL HUB</strong></div>
+            </div>
+            <nav class="nav" id="publicNav"><button class="active" onclick="goHome()">Home</button><button onclick="showPublic('libraries')">Libraries</button><button onclick="showPublic('about')">About Us</button></nav>
+            <label class="search">⌕ <input id="globalSearch" placeholder="Search library..." onkeydown="if(event.key==='Enter')searchLibrary()"><button class="link" onclick="searchLibrary()">↵</button></label>
+            <button class="iconbtn" title="Notifications" onclick="notifications()">♧<span id="notifDot" class="dot hidden"></span></button>
+            <button class="iconbtn" title="Profile / Login" onclick="profileAction()">♙</button>
+            <button id="logoutBtn" class="logout-btn hidden" onclick="logout()">↪ Logout</button>
+            <button class="iconbtn mobilemenu" onclick="toggleSidebar()">☰</button>
+        </header>
+        <div class="layout">
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebrand">
+                    <div class="cap">🎓</div>
+                    <div><b>EL ROYALE</b><small id="sideRole">Student Services</small></div>
+                </div>
+                <div class="menu" id="sideMenu"></div>
+            </aside>
+            <main id="main"></main>
+        </div>
+        <footer class="footer">© 2026 El Royale Hub. All rights reserved.</footer>
+    </div>
+    <div class="modalback" id="loginModal" onclick="if(event.target===this)closeLogin()">
+        <div class="modal"><button class="close" onclick="closeLogin()">×</button>
+            <h2>Welcome to El Royale</h2>
+            <p class="muted">Choose your account type to continue.</p>
+            <div class="rolebuttons"><button class="selected" data-role="student" onclick="chooseRole('student')">🎓<br>Student</button><button data-role="teacher" onclick="chooseRole('teacher')">🧑‍🏫<br>Teacher</button><button data-role="admin" onclick="chooseRole('admin')">⚙️<br>Admin</button></div>
+            <div class="field"><label>Username / School ID</label><input id="loginUser" placeholder="Enter your account ID" value="demo"></div>
+            <div class="field"><label>Password</label><input id="loginPass" type="password" placeholder="Enter password" value="demo123"></div>
+            <p class="muted" style="font-size:12px">Prototype only: any non-empty username and password will open a sample dashboard. Real authentication will be added during development.</p><button class="primary" style="width:100%" onclick="login()">Log in</button></div>
+    </div>
+    <div class="modalback" id="dateModal" onclick="if(event.target===this)this.classList.remove('open')">
+        <div class="modal"><button class="close" onclick="document.getElementById('dateModal').classList.remove('open')">×</button>
+            <h2 id="dateModalTitle">Selected date</h2>
+            <div id="dateModalBody" style="margin-top:15px"></div>
+        </div>
+    </div>
+    <div class="toast" id="toast"></div>
+    <script>
+        const libraryItems = [{
+            title: 'Digital Transformation',
+            type: 'Reference',
+            audience: 'Public',
+            desc: 'An introduction to digital transformation and how technology improves school services.'
+        }, {
+            title: 'Research Title',
+            type: 'Capstone',
+            audience: 'Student',
+            desc: 'Sample research titles and capstone references for student learning.'
+        }, {
+            title: 'Capstone Flow',
+            type: 'Guide',
+            audience: 'Student',
+            desc: 'A simple guide to understanding capstone development and documentation.'
+        }, {
+            title: 'Student Handbook',
+            type: 'Handbook',
+            audience: 'Student',
+            desc: 'School policies, student responsibilities, and general academic guidance.'
+        }, {
+            title: 'Research Abstract Collection',
+            type: 'Capstone',
+            audience: 'Student',
+            desc: 'Browse abstracts of selected capstone and research projects.'
+        }, {
+            title: 'Faculty Guide',
+            type: 'Document',
+            audience: 'Teacher',
+            desc: 'A reference guide for faculty processes and school services.'
+        }];
+        const menus = {
+            student: ['Dashboard', 'Profile', 'Class Schedule', 'Attendance', 'Grades', 'Announcement', 'School Calendar', 'Document Request', 'School Library', 'Feedback'],
+            teacher: ['Dashboard', 'Class List', 'Class Schedule', 'Grade Encoding', 'Announcement Posting', 'QR Attendance', 'Attendance Report', 'Feedback'],
+            admin: ['Dashboard', 'Student', 'Teacher', 'Academic Management', 'Calendar', 'Announcement', 'Document Request', 'School Library', 'Feedback']
+        };
+        let role = null,
+            page = 'Home',
+            selectedRole = 'student',
+            announcementIndex = 0;
+        const announcements = [{
+            title: 'Walang pasok bukas Friday',
+            sub: 'Sept 18, 2026 Due to Bad Weather',
+            audience: 'Public'
+        }, {
+            title: 'Reminder: Check your class schedule',
+            sub: 'Please review your updated class schedule.',
+            audience: 'Student'
+        }, {
+            title: 'Faculty meeting and updates',
+            sub: 'Please check the latest faculty announcements.',
+            audience: 'Teacher'
+        }];
+
+        function esc(s) {
+            return String(s ?? '').replace(/[&<>"']/g, c => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[c]))
+        }
+
+        function toast(msg) {
+            let t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2600)
+        }
+
+        function goHome() {
+            role = null;
+            page = 'Home';
+            document.getElementById('sidebar').classList.remove('show');
+            document.getElementById('publicNav').classList.remove('hidden');
+            render()
+        }
+
+        function showPublic(p) {
+            role = null;
+            page = p === 'libraries' ? 'Libraries' : 'About Us';
+            document.getElementById('sidebar').classList.remove('show');
+            document.getElementById('publicNav').classList.remove('hidden');
+            render()
+        }
+
+        function openLogin() {
+            document.getElementById('loginModal').classList.add('open')
+        }
+
+        function closeLogin() {
+            document.getElementById('loginModal').classList.remove('open')
+        }
+
+        function chooseRole(r) {
+            selectedRole = r;
+            document.querySelectorAll('.rolebuttons button').forEach(b => b.classList.toggle('selected', b.dataset.role === r))
+        }
+
+        function login() {
+            if (!document.getElementById('loginUser').value.trim() || !document.getElementById('loginPass').value) {
+                toast('Enter a username and password.');
+                return
+            }
+            role = selectedRole;
+            page = 'Dashboard';
+            closeLogin();
+            document.getElementById('publicNav').classList.add('hidden');
+            document.getElementById('sidebar').classList.add('show');
+            document.getElementById('logoutBtn').classList.remove('hidden');
+            document.getElementById('sideRole').textContent = role === 'admin' ? 'Administrative Services' : role === 'teacher' ? 'Faculty Services' : 'Student Services';
+            document.getElementById('notifDot').classList.remove('hidden');
+            render();
+            toast('Prototype login successful.')
+        }
+
+        function profileAction() {
+            if (role) {
+                page = 'Profile';
+                render()
+            } else openLogin()
+        }
+
+        function logout() {
+            role = null;
+            page = 'Home';
+            document.getElementById('logoutBtn').classList.add('hidden');
+            document.getElementById('notifDot').classList.add('hidden');
+            document.getElementById('sidebar').classList.remove('show');
+            document.getElementById('publicNav').classList.remove('hidden');
+            render();
+            toast('You have logged out of the prototype.')
+        }
+
+        function notifications() {
+            if (!role) {
+                toast('Log in to view notifications.');
+                openLogin();
+                return
+            }
+            showPage('Announcement')
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show')
+        }
+
+        function showPage(p) {
+            page = p;
+            render();
+            document.getElementById('sidebar').classList.add('show')
+        }
+
+        function searchLibrary() {
+            const q = document.getElementById('globalSearch').value.trim();
+            if (role) {
+                page = 'School Library';
+                render(q)
+            } else {
+                page = 'Libraries';
+                render(q)
+            }
+        }
+
+        function btn(label, fn, cls = 'primary') {
+            return `<button class="${cls}" onclick="${fn}">${label}</button>`
+        }
+
+        function card(title, desc, action, fn) {
+            return `<article class="card"><h3>${title}</h3><p>${desc}</p><div class="cardfoot"><button class="link" onclick="${fn}">${action}</button><button class="round" onclick="${fn}">→</button></div></article>`
+        }
+
+        function stat(title, value, sub = '') {
+            return `<div class="stat"><small>${title}</small><strong>${value}</strong><small>${sub}</small></div>`
+        }
+
+        function header(title, sub = '') {
+            return `<div class="pagehead"><div><h1>${title}</h1>${sub?`<div class="muted">${sub}</div>`:''}</div></div>`}
+function render(search=''){
+ const main=document.getElementById('main');
+ if(!role){document.getElementById('sidebar').classList.remove('show');document.getElementById('publicNav').classList.remove('hidden');main.innerHTML=renderPublic(search);return}
+ document.getElementById('sidebar').classList.add('show');document.getElementById('publicNav').classList.add('hidden');
+ document.getElementById('sideMenu').innerHTML=menus[role].map(m=>`<button class="${page===m?'active':''}" onclick="showPage('${m}')">${m}</button>`).join('');
+ let fn=role==='student'?renderStudent:role==='teacher'?renderTeacher:renderAdmin;
+ main.innerHTML=fn(search);
+}
+function renderPublic(search=''){
+ if(page==='Libraries')return `${header('School Library','Browse public resources and published school references.')}<div class="field"><label>Search library</label><input value="${esc(search)}" placeholder="Search by title or topic..." oninput="renderLibrarySearch(this.value,'public')"></div><div id="publicLibraryResults" class="cards">${libraryCards(search,'public')}</div>`;
+ if(page==='About Us')return `${header('About El Royale Digital Hub','A centralized school information and service portal.')}<div class="card"><h3>About the system</h3><p>El Royale Digital Hub is a proposed web-based platform that brings school announcements, library resources, and role-based services together in one place.</p><p>Students can view their academic information and request documents. Teachers can manage final grades and QR-assisted attendance. Administrators manage accounts, school information, announcements, document requests, and library resources.</p><p class="muted">This is an early prototype using sample data. No real student records are stored.</p></div>`;
+ return `<section class="hero"><span class="pill">📣 Announcements</span><button class="round left" onclick="changeAnnouncement(-1)">←</button><button class="round right" onclick="changeAnnouncement(1)">→</button><h2>${esc(announcements[announcementIndex].title)}</h2><p>${esc(announcements[announcementIndex].sub)}</p>${btn('View Details →',"showPublic('about')")}<div class="dots">● ● ●</div></section><h2 class="section-title">▣ School Library</h2><div class="cards">${libraryItems.slice(0,3).map((x,i)=>card(x.title,x.desc,'Read More',`showPublic('libraries')`)).join('')}</div>`;
+}
+function changeAnnouncement(n){announcementIndex=(announcementIndex+n+announcements.length)%announcements.length;render()}
+function libraryCards(q='',aud='public'){let list=libraryItems.filter(x=>(aud==='student'?['Student','Public'].includes(x.audience):aud==='teacher'?['Teacher','Public'].includes(x.audience):x.audience==='Public'||x.audience==='Student')&&(`${x.title} ${x.desc} ${x.type}`).toLowerCase().includes(q.toLowerCase()));return list.length?list.map(x=>`<article class="card"><span class="badge">${x.type}</span><h3 style="margin-top:10px">${esc(x.title)}</h3><p>${esc(x.desc)}</p><div class="cardfoot"><span class="muted" style="font-size:12px">Access: ${x.audience}</span><button class="link" onclick="toast('Opening sample abstract / resource.')">Read More →</button></div></article>`).join(''):'<div class="card empty">No matching library resources found.</div>'}
+function renderLibrarySearch(q,aud){document.getElementById('publicLibraryResults').innerHTML=libraryCards(q,aud)}
+function dashboard(roleName){return `${header('Dashboard',`Welcome back. Here's your ${roleName.toLowerCase()} overview.`)}<div class="stats">${role==='student'?stat('Attendance','92%','Present this term')+stat('Current GWA','1.65','Sample grades')+stat('Announcements','3','Unread updates')+stat('Document Requests','1','In progress'):role==='teacher'?stat('Assigned Classes','3','This semester')+stat('Students','86','Across assigned classes')+stat('Attendance Today','78','Sample records')+stat('Pending Grades','4','Need encoding'):stat('Students','120','Sample records')+stat('Teachers','12','Sample accounts')+stat('Pending Requests','5','Need review')+stat('Library Resources','24','Published items')}</div><div class="grid2"><div class="card"><h3>Recent Announcements</h3>${announcements.slice(0,2).map(a=>`<div class="listrow"><div><b>${esc(a.title)}</b><div class="muted" style="font-size:12px">${esc(a.sub)}</div></div><span class="badge">New</span></div>`).join('')}<p style="margin-top:14px">${btn('View announcements',"showPage('Announcement')")}</p></div><div class="card"><h3>Quick Actions</h3>${(role==='student'?['View Grades','Scan QR Attendance','Request a Document']:role==='teacher'?['Encode Final Grades','Create Attendance QR','View Attendance Report']:['Create Student Account','Create Announcement','Review Document Requests']).map((x,i)=>`<div class="listrow"><span>${x}</span><button class="link" onclick="quickAction(${i})">Open →</button></div>`).join('')}</div></div>`}
+function quickAction(i){if(role==='student')showPage(['Grades','Attendance','Document Request'][i]);else if(role==='teacher')showPage(['Grade Encoding','QR Attendance','Attendance Report'][i]);else showPage(['Student','Announcement','Document Request'][i])}
+function renderStudent(search=''){
+ if(page==='Dashboard')return dashboard('Student');
+ if(page==='Profile')return `${header('My Profile','Your profile is view-only. Personal details and ID photo are managed by the administrator.')}<div class="card"><div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:20px"><div class="profile-avatar" id="studentAvatar">👤</div><div><h2 style="margin:0 0 5px">Juan Dela Cruz</h2><div class="muted">Student ID: ER-2026-001</div><span class="badge" style="margin-top:9px">Enrolled · 2026–2027</span></div></div><div class="inline-note">Profile details cannot be edited by students. To correct information or update your ID photo, contact the administrator.</div><div class="formrow" style="margin-top:20px"><div class="field"><label>Full name</label><input value="Juan Dela Cruz" readonly></div><div class="field"><label>Student ID</label><input value="ER-2026-001" readonly></div><div class="field"><label>Course and year</label><input value="Diploma in Information Technology — 1st Year" readonly></div><div class="field"><label>Section</label><input value="Hermes" readonly></div><div class="field"><label>Email</label><input value="student@example.com" readonly></div><div class="field"><label>Contact number</label><input value="09XX XXX XXXX" readonly></div><div class="field"><label>Address</label><input value="Tayabas City" readonly></div></div></div>`;
+ if(page==='Class Schedule')return `${header('Class Schedule','View your assigned class schedule.')}<div class="tablewrap"><table><thead><tr><th>Day</th><th>Time</th><th>Subject</th><th>Room</th><th>Instructor</th></tr></thead><tbody><tr><td>Monday</td><td>8:00–10:00 AM</td><td>Introduction to Computing</td><td>Lab 1</td><td>Sample Faculty</td></tr><tr><td>Tuesday</td><td>10:00 AM–12:00 PM</td><td>Programming 1</td><td>Room 2</td><td>Sample Faculty</td></tr><tr><td>Thursday</td><td>1:00–3:00 PM</td><td>Purposive Communication</td><td>Room 3</td><td>Sample Faculty</td></tr></tbody></table></div>`;
+ if(page==='Attendance')return `${header('Attendance','View attendance totals and class details. Scan your teacher’s QR code to record attendance.')}<div class="stats">${stat('Present','42','Recorded present days')}${stat('Absent','4','Recorded absent days')}${stat('Attendance Rate','91%','Current term')}</div><div class="grid2"><div class="card"><h3>Scan Teacher QR Code</h3><p>Scan the QR code displayed by your teacher during class. This demo simulates the attendance record.</p><div style="border:2px dashed #9bbbdc;border-radius:14px;padding:28px;text-align:center;font-size:54px;background:#f5faff">▦</div><p style="margin-top:15px">${btn('Simulate QR Scan',"toast('Demo attendance recorded for Programming 1 · Lab 1 · Oct 15, 2026 · 8:02 AM')")}</p></div><div class="card"><h3>Attendance Records</h3><div class="tablewrap"><table><thead><tr><th>Date & Time</th><th>Subject</th><th>Room</th><th>Teacher</th><th>Status</th></tr></thead><tbody>${[['Oct 15, 2026 · 8:02 AM','Programming 1','Lab 1','Mr. Sample','Present'],['Oct 14, 2026 · 10:03 AM','Introduction to Computing','Room 2','Ms. Sample','Present'],['Oct 13, 2026 · —','Web Development','Lab 2','Mr. Sample','Absent'],['Oct 12, 2026 · 1:04 PM','Purposive Communication','Room 3','Ms. Sample','Present']].map(a=>`<tr><td>${a[0]}</td><td>${a[1]}</td><td>${a[2]}</td><td>${a[3]}</td><td><span class="badge ${a[4]==='Absent'?'absent':''}">${a[4]}</span></td></tr>`).join('')}</tbody></table></div></div></div>`;
+ if(page==='Grades')return `${header('My Grades','Final grades entered by your assigned teacher.')}<div class="stats">${stat('General Average','1.65','Sample GWA')}${stat('Dean’s Lister','Qualified','Based on sample criteria')}</div><div class="tablewrap"><table><thead><tr><th>Subject</th><th>Final Grade</th><th>Remarks</th></tr></thead><tbody><tr><td>Introduction to Computing</td><td>1.50</td><td><span class="badge">Passed</span></td></tr><tr><td>Programming 1</td><td>1.75</td><td><span class="badge">Passed</span></td></tr><tr><td>Purposive Communication</td><td>1.75</td><td><span class="badge">Passed</span></td></tr></tbody></table></div><p class="muted">Dean’s List qualification rules should be confirmed with school policy before final implementation.</p>`;
+ if(page==='Announcement')return `${header('Announcements','Updates available to students.')}<div class="cards">${announcements.filter(a=>a.audience!=='Teacher').map(a=>`<article class="card"><span class="badge">Announcement</span><h3 style="margin-top:12px">${esc(a.title)}</h3><p>${esc(a.sub)}</p><button class="link" onclick="toast('Announcement opened.')">View details →</button></article>`).join('')}</div>`;
+ if(page==='School Calendar'||page==='Calendar')return calendarPage();
+ if(page==='Document Request')return documentRequestStudent();
+ if(page==='School Library')return `${header('School Library','Student-accessible books, capstone abstracts, and references.')}<div class="field"><label>Search resources</label><input value="${esc(search)}" placeholder="Search title or topic" oninput="renderLibrarySearch(this.value,'student')"></div><div id="publicLibraryResults" class="cards">${libraryCards(search,'student')}</div>`;
+ if(page==='Feedback')return feedbackForm();
+ return dashboard('Student');
+}
+let calendarMonthOffset=0;function shiftCalendar(n){calendarMonthOffset+=n;render()}function openCalendarDate(day,label){document.getElementById('dateModalTitle').textContent=label||('October '+day+', 2026');document.getElementById('dateModalBody').innerHTML=(day===18?'<b>School event</b><p>School-wide activity. Check announcements for details.</p>':day===25?'<b>Submission deadline</b><p>Remember to check your class requirements.</p>':'<b>No scheduled event</b><p>You can use this date for personal planning.</p>');document.getElementById('dateModal').classList.add('open')}function calendarPage(){let base=new Date(2026,9+calendarMonthOffset,1),year=base.getFullYear(),month=base.getMonth(),monthName=base.toLocaleString('en-US',{month:'long'}),days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],count=new Date(year,month+1,0).getDate(),cells=days.map(d=>`<div class="day" style="min-height:auto;background:#edf5fc;font-weight:bold;cursor:default">${d}</div>`).join('');for(let i=0;i<new Date(year,month,1).getDay();i++)cells+='<div class="day" style="background:transparent;border-color:transparent"></div>';for(let i=1;i<=count;i++){let event=(month===9&&i===18)?'School event':(month===9&&i===25)?'Submission deadline':'';cells+=`<div class="day ${event?'event':''}" onclick="openCalendarDate(${i},'${monthName} ${i}, ${year}')"><b>${i}</b>${event?`<span>${event}</span>`:''}</div>`}return `${header('School Calendar','Swipe left or right, or use the arrows, to browse dates. Select a date to view its events.')}<div class="card" id="calendarSwipe"><div class="pagehead"><div class="month-controls"><button onclick="shiftCalendar(-1)">← Previous</button><button onclick="shiftCalendar(1)">Next →</button></div><h3>${monthName} ${year}</h3></div><div class="calendar" ontouchstart="calendarTouchStart(event)" ontouchend="calendarTouchEnd(event)">${cells}</div><p class="muted" style="margin-top:14px">Blue dates indicate scheduled events. Event details open when a date is selected.</p></div>`}let calendarTouchX=null;function calendarTouchStart(e){calendarTouchX=e.changedTouches[0].screenX}function calendarTouchEnd(e){if(calendarTouchX===null)return;let dx=e.changedTouches[0].screenX-calendarTouchX;if(Math.abs(dx)>55)shiftCalendar(dx<0?1:-1);calendarTouchX=null}
+function documentRequestStudent(){return `${header('Document Request','Submit a request and track its processing status.')}<div class="grid2"><div class="card"><h3>Request a document</h3><div class="field"><label>Document type</label><select id="docType"><option>Certificate of Enrollment</option><option>Transcript of Records</option><option>Good Moral Certificate</option><option>Certificate of Grades</option><option>Other Registrar Document</option></select></div><div class="field"><label>Purpose / notes</label><textarea id="docNote" placeholder="Enter purpose or additional details (optional)"></textarea></div><button class="primary" onclick="submitDoc()">Submit Request</button></div><div class="card"><h3>My requests</h3><div id="docList"><div class="listrow"><div><b>Certificate of Enrollment</b><div class="muted">Submitted Oct 12, 2026</div></div><span class="badge pending">Processing</span></div><div class="listrow"><div><b>Certificate of Grades</b><div class="muted">Submitted Oct 05, 2026</div></div><span class="badge release">For Release</span></div></div></div></div>`}
+function submitDoc(){let type=document.getElementById('docType').value;let list=document.getElementById('docList');list.insertAdjacentHTML('afterbegin',`<div class="listrow"><div><b>${esc(type)}</b><div class="muted">Submitted today</div></div><span class="badge pending">Pending</span></div>`);toast('Demo request submitted.')}
+function feedbackForm(){return `${header('Feedback','Send a suggestion or concern. Your name is not shown in the feedback list.')}<div class="card" style="max-width:720px"><div class="field"><label>Send feedback to</label><select id="feedbackTarget"><option>Administrator</option><option>Teacher</option><option>School Administration</option></select></div><div class="field"><label>Feedback category</label><select id="feedbackType"><option>Suggestion</option><option>Concern</option><option>Service improvement</option><option>Other</option></select></div><div class="field"><label>Message</label><textarea id="feedbackText" placeholder="Share your feedback without including personal details..." required></textarea></div><button class="primary" onclick="submitFeedback()">Send Feedback</button><p class="muted" style="font-size:12px;margin-top:12px">Privacy note: this prototype hides your name in the interface. A real system must still define secure handling, access controls, and whether technical logs can identify a sender.</p></div>`}
+function submitFeedback(){let t=document.getElementById('feedbackText').value.trim();if(!t){toast('Please write your feedback first.');return}toast('Anonymous demo feedback submitted.');document.getElementById('feedbackText').value=''}
+function renderTeacher(search=''){
+ if(page==='Dashboard')return dashboard('Teacher');
+ if(page==='Class List')return `${header('Class List','Choose a subject and section to display only the students assigned to that class.')}<div class="card"><div class="formrow"><div class="field"><label>Subject</label><select id="classSubject" onchange="filterClassList()"><option>Programming 1</option><option>Web Development</option><option>Introduction to Computing</option></select></div><div class="field"><label>Section</label><select id="classSection" onchange="filterClassList()"><option>Hermes</option><option>Poseidon</option><option>Aphrodite</option></select></div></div><div class="field"><label>Search student</label><input placeholder="Search name or ID..." oninput="filterClassList(this.value)"></div><div class="tablewrap"><table id="dataTable"><thead><tr><th>Student</th><th>Student ID</th><th>Final Grade</th><th>Present</th><th>Absent</th></tr></thead><tbody>${[['Juan Dela Cruz','ER-001','1.50',18,1,'Hermes'],['Maria Santos','ER-002','1.75',17,2,'Hermes'],['Paolo Reyes','ER-003','2.00',16,3,'Hermes'],['Ana Garcia','ER-004','1.25',19,0,'Hermes'],['Lia Cruz','ER-005','2.00',15,4,'Poseidon'],['Marco Reyes','ER-006','1.75',17,2,'Aphrodite']].map(r=>`<tr data-section="${r[5]}" data-subject="${r[5]==="Poseidon"?"Web Development":r[5]==="Aphrodite"?"Introduction to Computing":"Programming 1"}"><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td></tr>`).join('')}</tbody></table></div><p class="muted" style="margin-top:12px">The live version will filter students by the teacher’s assigned subject and section.</p></div>`;
+ if(page==='Class Schedule')return `${header('Class Schedule','Assigned teaching schedule.')}<div class="tablewrap"><table><thead><tr><th>Day</th><th>Time</th><th>Subject</th><th>Section</th><th>Room</th></tr></thead><tbody><tr><td>Monday</td><td>8:00–10:00 AM</td><td>Programming 1</td><td>Hermes</td><td>Lab 1</td></tr><tr><td>Wednesday</td><td>1:00–3:00 PM</td><td>Web Development</td><td>Hermes</td><td>Lab 2</td></tr></tbody></table></div>`;
+ if(page==='Grade Encoding')return `${header('Grade Encoding','Enter final grades only. Example format: 1.25, 1.50, 2.00.')}<div class="card"><div class="formrow"><div class="field"><label>Subject</label><select id="gradeSubject"><option>Programming 1</option><option>Web Development</option><option>Introduction to Computing</option></select></div><div class="field"><label>Section</label><select><option>Hermes</option><option>Poseidon</option></select></div></div><div class="tablewrap"><table><thead><tr><th>Student</th><th>Student ID</th><th>Final Grade</th></tr></thead><tbody>${[['Juan Dela Cruz','ER-001'],['Maria Santos','ER-002'],['Paolo Reyes','ER-003']].map((r,i)=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td><input style="width:100px;padding:7px;border:1px solid #ccd6df;border-radius:7px" type="number" min="1" max="5" step=".25" value="${[1.5,1.75,2][i]}"></td></tr>`).join('')}</tbody></table></div><p style="margin-top:16px">${btn('Save Final Grades',"toast('Sample final grades saved locally for this demo.')")}</p></div>`;
+ if(page==='Announcement Posting')return `${header('Announcement Posting','Teacher announcements are visible to students only.')}<div class="card"><div class="field"><label>Announcement title</label><input id="annTitle" placeholder="Enter announcement title"></div><div class="field"><label>Message</label><textarea id="annBody" placeholder="Write the announcement..."></textarea></div><p>${btn('Publish to Students',"publishTeacherAnnouncement()")}</p></div>`;
+ if(page==='QR Attendance')return `${header('QR Attendance','Create a QR attendance session for your class.')}<div class="grid2"><div class="card"><h3>Create attendance session</h3><div class="field"><label>Subject</label><select id="qrSubject"><option>Programming 1</option><option>Web Development</option><option>Introduction to Computing</option></select></div><div class="field"><label>Section</label><select id="qrSection"><option>Hermes</option><option>Poseidon</option><option>Aphrodite</option></select></div><div class="field"><label>Session date</label><input type="date" value="2026-10-15" id="qrDate"></div><button class="primary" onclick="createQR()">Generate QR Session</button></div><div class="card" id="qrPreview"><h3>QR preview</h3><div class="empty">Create a session to show a sample QR placeholder.</div></div></div>`;
+ if(page==='Attendance Report')return `${header('Attendance Report','Review student attendance records.')}<div class="field"><select><option>Programming 1 — Hermes</option><option>Web Development — Hermes</option></select></div><div class="tablewrap"><table><thead><tr><th>Date</th><th>Student</th><th>Status</th><th>Time</th></tr></thead><tbody>${[['Oct 15, 2026','Juan Dela Cruz','Present','8:02 AM'],['Oct 15, 2026','Maria Santos','Present','8:04 AM'],['Oct 15, 2026','Paolo Reyes','Absent','—'],['Oct 14, 2026','Juan Dela Cruz','Present','8:01 AM']].map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td><span class="badge ${r[2]==='Absent'?'absent':''}">${r[2]}</span></td><td>${r[3]}</td></tr>`).join('')}</tbody></table></div>`;
+ if(page==='Feedback')return `${header('Student Feedback','Feedback is displayed without student names.')}<div class="card">${[['Suggestion','Please add more library references.','Oct 14, 2026'],['Concern','The class schedule page is sometimes difficult to read.','Oct 13, 2026']].map(r=>`<div class="listrow" style="align-items:flex-start"><div><span class="badge">${r[0]}</span><p>${r[1]}</p><small class="muted">${r[2]} · Anonymous</small></div></div>`).join('')}</div>`;
+ return dashboard('Teacher');
+}
+function publishTeacherAnnouncement(){let t=document.getElementById('annTitle').value.trim(),b=document.getElementById('annBody').value.trim();if(!t||!b){toast('Enter a title and message.');return}announcements.unshift({title:t,sub:b,audience:'Student'});toast('Sample announcement published to students.')}
+function createQR(){let s=document.getElementById('qrSubject').value,sec=document.getElementById('qrSection').value,d=document.getElementById('qrDate').value;document.getElementById('qrPreview').innerHTML=`<h3>QR attendance session</h3><div style="font-size:80px;text-align:center;border:8px solid #eef3f8;padding:12px;margin:15px auto;width:160px">▦</div><p><b>${esc(s)}</b><br>Section: ${esc(sec)}<br>Date: ${esc(d)}</p><p class="muted">Prototype QR placeholder only. A secure QR token and validation must be implemented in the backend.</p><button class="primary" onclick="toast('Demo session ready; no real QR token created.')">Start Session</button>`}
+function filterTable(q){document.querySelectorAll('#dataTable tbody tr').forEach(tr=>tr.style.display=tr.innerText.toLowerCase().includes(q.toLowerCase())?'':'none')}
+function filterClassList(q=''){let section=document.getElementById('classSection')?.value||'Hermes',subject=document.getElementById('classSubject')?.value||'Programming 1';document.querySelectorAll('#dataTable tbody tr').forEach(tr=>{tr.style.display=(tr.dataset.section===section&&tr.dataset.subject===subject&&tr.innerText.toLowerCase().includes(q.toLowerCase()))?'':'none'})}
+function previewAcctPhoto(input){let file=input.files&&input.files[0];if(!file)return;if(!file.type.startsWith('image/')){toast('Please choose an image file.');input.value='';return}let reader=new FileReader();reader.onload=e=>{let box=document.getElementById('acctPhotoPreview');if(box)box.innerHTML=`<img alt="Selected ID photo preview" src="${e.target.result}">`};reader.readAsDataURL(file)}
+function renderAdmin(search=''){
+ if(page==='Dashboard')return dashboard('Administrator');
+ if(page==='Student'||page==='Teacher')return accountManagement(page);
+ if(page==='Academic Management')return academicManagement();
+ if(page==='Calendar')return `${header('School Calendar Management','Add important events for the school year.')}<div class="grid2"><div class="card"><div class="field"><label>Event title</label><input id="eventTitle" placeholder="School Foundation Day"></div><div class="field"><label>Date</label><input type="date" id="eventDate"></div><div class="field"><label>Audience</label><select><option>Everyone</option><option>Students</option><option>Teachers</option></select></div><button class="primary" onclick="addEvent()">Add Event</button></div><div class="card"><h3>Upcoming events</h3><div id="eventsList"><div class="listrow"><b>School event</b><span>Oct 18, 2026</span></div><div class="listrow"><b>Submission deadline</b><span>Oct 25, 2026</span></div></div></div></div>`;
+ if(page==='Announcement')return adminAnnouncements();
+ if(page==='Document Request')return `${header('Document Requests','Review student requests and update their status.')}<div class="tablewrap"><table id="requestTable"><thead><tr><th>Student</th><th>Document</th><th>Date</th><th>Status</th><th>Update status</th></tr></thead><tbody>${[['Juan Dela Cruz','Certificate of Enrollment','Oct 12, 2026','Processing'],['Maria Santos','Certificate of Grades','Oct 11, 2026','Pending'],['Paolo Reyes','Good Moral Certificate','Oct 05, 2026','For Release']].map((r,i)=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td class="statusCell"><span class="badge ${r[3]==='For Release'?'release':'pending'}">${r[3]}</span></td><td><select onchange="updateRequest(this)"><option ${r[3]==='Pending'?'selected':''}>Pending</option><option ${r[3]==='Processing'?'selected':''}>Processing</option><option ${r[3]==='For Release'?'selected':''}>For Release</option><option>Released</option></select></td></tr>`).join('')}</tbody></table></div>`;
+ if(page==='School Library')return adminLibrary(search);
+ if(page==='Feedback')return `${header('Feedback Inbox','Review suggestions and concerns without displaying student names.')}<div class="cards">${[['Suggestion','Please add more library references.','Oct 14, 2026'],['Concern','The class schedule page is sometimes difficult to read.','Oct 13, 2026'],['Service improvement','Please include a document request status notification.','Oct 10, 2026']].map(r=>`<article class="card"><span class="badge">${r[0]}</span><p style="margin-top:12px;font-size:15px">${r[1]}</p><div class="muted" style="font-size:12px">${r[2]} · Anonymous</div><div style="margin-top:14px"><button class="link" onclick="this.textContent='Reviewed ✓';this.disabled=true">Mark as reviewed</button></div></article>`).join('')}</div>`;
+ return dashboard('Administrator');
+}
+function accountManagement(kind){let plural=kind==='Student'?'Students':'Teachers';return `${header(`${kind} Management`,`Create accounts and maintain complete ${kind.toLowerCase()} records. Only administrators can edit these details.`)}<div class="grid2"><div class="card"><h3>Create ${kind} Account</h3><div class="field"><label>Full name *</label><input id="acctName" placeholder="Enter full name"></div><div class="field"><label>School ID / Username *</label><input id="acctId" placeholder="e.g. ER-2026-005"></div><div class="field"><label>Temporary password *</label><input id="acctPass" type="password" placeholder="Set temporary password"></div>${kind==='Student'?'<div class="formrow"><div class="field"><label>Birth date</label><input type="date" id="acctBirth"></div><div class="field"><label>Contact number</label><input id="acctContact" placeholder="09XX XXX XXXX"></div><div class="field"><label>Email address</label><input id="acctEmail" type="email" placeholder="student@example.com"></div><div class="field"><label>Home address</label><input id="acctAddress" placeholder="Complete address"></div><div class="field"><label>Course / program</label><select id="acctCourse"><option>Diploma in Information Technology</option></select></div><div class="field"><label>Year level</label><select id="acctYear"><option>1st Year</option><option>2nd Year</option><option>3rd Year</option></select></div><div class="field"><label>Auto-assign section</label><select id="acctSection"><option>Hermes</option><option>Poseidon</option><option>Aphrodite</option></select></div><div class="field"><label>Profile photo (from ID)</label><input type="file" id="acctPhoto" accept="image/*" onchange="previewAcctPhoto(this)"><div id="acctPhotoPreview" class="profile-avatar" style="width:66px;height:66px;font-size:26px">👤</div></div></div><div class="inline-note">The student will be assigned to the selected section and its configured subjects/teachers. Admin can edit the assignment later in Academic Management.</div>':'<div class="formrow"><div class="field"><label>Email</label><input id="acctEmail" placeholder="faculty@example.com"></div><div class="field"><label>Assigned section</label><select id="acctSection"><option>Hermes</option><option>Poseidon</option><option>Aphrodite</option></select></div><div class="field"><label>Assigned subject</label><select id="acctSubject"><option>Programming 1</option><option>Web Development</option><option>Introduction to Computing</option></select></div></div>'}<button class="primary" onclick="createAccount('${kind}')">Create Account</button></div><div class="card"><h3>Registered ${plural}</h3><div class="field"><input placeholder="Search ${plural.toLowerCase()}..." oninput="filterTable(this.value)"></div><div class="tablewrap"><table id="dataTable"><thead><tr><th>Name</th><th>ID</th><th>${kind==='Student'?'Section':'Assignment'}</th><th>Status</th></tr></thead><tbody>${(kind==='Student'?[['Juan Dela Cruz','ER-001','Hermes'],['Maria Santos','ER-002','Hermes'],['Paolo Reyes','ER-003','Poseidon']]:[['Sample Faculty','FAC-001','Programming 1 · Hermes'],['Alex Rivera','FAC-002','Web Development · Hermes']]).map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td><span class="badge">Active</span></td></tr>`).join('')}</tbody></table></div></div></div>`}
+function academicManagement(){return `${header('Academic Management','Manage programs, sections, subject assignments, class schedules, and section capacity in one place.')}<div class="grid2"><div class="card"><h3>Create / Edit Class Assignment</h3><div class="field"><label>Course / Program</label><select id="acadCourse"><option>Diploma in Information Technology</option><option>Hospitality Management</option></select></div><div class="formrow"><div class="field"><label>Year level</label><select id="acadYear"><option>1st Year</option><option>2nd Year</option><option>3rd Year</option></select></div><div class="field"><label>Section name</label><input id="acadSection" placeholder="e.g. Hermes"></div><div class="field"><label>Subject</label><input id="acadSubject" placeholder="e.g. Web Development"></div><div class="field"><label>Teacher</label><select id="acadTeacher"><option>Sample Faculty</option><option>Alex Rivera</option><option>Faculty Member 3</option></select></div><div class="field"><label>Units</label><input id="acadUnits" type="number" min="1" max="6" value="3"></div><div class="field"><label>Hours per week</label><input id="acadHours" type="number" min="1" max="12" value="3"></div><div class="field"><label>Room</label><input id="acadRoom" placeholder="e.g. Lab 1"></div><div class="field"><label>Section capacity</label><input id="acadLimit" type="number" min="1" max="60" value="20"></div><div class="field"><label>Schedule day</label><select id="acadDay"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option></select></div><div class="field"><label>Time</label><input id="acadTime" placeholder="8:00–10:00 AM"></div></div><button class="primary" onclick="addAcademicRow()">Save Class Assignment</button><p class="muted" style="font-size:12px;margin-top:10px">Prototype rule: student accounts can be assigned to a section; section subjects, teachers, schedules, and capacity are configured here.</p></div><div class="card"><h3>Class Assignments</h3><div class="field"><input placeholder="Search course, section, or subject" oninput="filterTable(this.value)"></div><div class="tablewrap"><table id="dataTable"><thead><tr><th>Section / Subject</th><th>Teacher</th><th>Units / Hours</th><th>Room / Schedule</th><th>Capacity</th></tr></thead><tbody><tr><td>Hermes · Programming 1</td><td>Sample Faculty</td><td>3 units · 3 hrs</td><td>Lab 1 · Monday 8:00–10:00 AM</td><td>20</td></tr><tr><td>Hermes · Introduction to Computing</td><td>Alex Rivera</td><td>3 units · 3 hrs</td><td>Room 2 · Tuesday 10:00 AM–12:00 PM</td><td>20</td></tr></tbody></table></div></div></div>`}
+function addAcademicRow(){let ids=['acadSection','acadSubject','acadRoom','acadTime'];let vals=ids.map(id=>document.getElementById(id).value.trim());if(vals.some(v=>!v)){toast('Complete section, subject, room, and time.');return}let course=document.getElementById('acadCourse').value,year=document.getElementById('acadYear').value,teacher=document.getElementById('acadTeacher').value,units=document.getElementById('acadUnits').value,hours=document.getElementById('acadHours').value,limit=document.getElementById('acadLimit').value,day=document.getElementById('acadDay').value;document.querySelector('#dataTable tbody').insertAdjacentHTML('beforeend',`<tr><td>${esc(vals[0])} · ${esc(vals[1])}<small style="display:block;color:#64758a">${esc(course)} · ${esc(year)}</small></td><td>${esc(teacher)}</td><td>${esc(units)} units · ${esc(hours)} hrs</td><td>${esc(vals[2])} · ${esc(day)} ${esc(vals[3])}</td><td>${esc(limit)}</td></tr>`);toast('Class assignment added to this prototype.');}
+function createAccount(kind){let n=document.getElementById('acctName').value.trim(),id=document.getElementById('acctId').value.trim(),p=document.getElementById('acctPass').value.trim();if(!n||!id||!p){toast('Complete all required account fields.');return}let extra='';if(kind==='Student'){extra=document.getElementById('acctSection')?.value||'Hermes';let photo=document.getElementById('acctPhoto')?.files?.[0];if(photo)toast('Student account demo created. Photo selected for this session.')}else extra=(document.getElementById('acctSubject')?.value||'Programming 1')+' · '+(document.getElementById('acctSection')?.value||'Hermes');document.querySelector('#dataTable tbody').insertAdjacentHTML('afterbegin',`<tr><td>${esc(n)}</td><td>${esc(id)}</td><td>${esc(extra)}</td><td><span class="badge">Demo account</span></td></tr>`);document.getElementById('acctName').value='';document.getElementById('acctId').value='';document.getElementById('acctPass').value='';toast(`${kind} demo account added to this page.`)}
+function simpleManager(title,label,placeholder){return `${header(`${title} Management`,`Create and manage school ${title.toLowerCase()} records.`)}<div class="card"><div class="field"><label>${label}</label><input id="simpleName" placeholder="${placeholder}"></div><button class="primary" onclick="addSimpleRow('simpleTable',['simpleName'])">Add ${title}</button><div class="tablewrap" style="margin-top:18px"><table id="simpleTable"><thead><tr><th>${label}</th><th>Status</th></tr></thead><tbody><tr><td>Introduction to Computing</td><td><span class="badge">Active</span></td></tr><tr><td>Programming 1</td><td><span class="badge">Active</span></td></tr></tbody></table></div></div>`}
+function addSimpleRow(tableId,ids){let vals=ids.map(id=>document.getElementById(id).value.trim());if(vals.some(v=>!v)){toast('Please complete the required fields.');return}document.querySelector(`#${tableId} tbody`).insertAdjacentHTML('beforeend',`<tr>${vals.map(v=>`<td>${esc(v)}</td>`).join('')}${vals.length===1?'<td><span class="badge">Active</span></td>':''}</tr>`);ids.forEach(id=>document.getElementById(id).value='');toast('Sample record added to this page.')}
+function addEvent(){let t=document.getElementById('eventTitle').value.trim(),d=document.getElementById('eventDate').value;if(!t||!d){toast('Enter an event title and date.');return}document.getElementById('eventsList').insertAdjacentHTML('afterbegin',`<div class="listrow"><b>${esc(t)}</b><span>${esc(d)}</span></div>`);toast('Demo event added.')}
+function adminAnnouncements(){return `${header('Announcement Management','Publish announcements to selected audiences.')}<div class="grid2"><div class="card"><h3>Create announcement</h3><div class="field"><label>Title</label><input id="annTitle" placeholder="Announcement title"></div><div class="field"><label>Message</label><textarea id="annBody" placeholder="Write announcement details"></textarea></div><div class="field"><label>Audience</label><select id="annAudience"><option>Public</option><option>1st Year Students</option><option>2nd Year Students</option><option>3rd Year Students</option><option>All Students</option><option>Teachers</option></select></div><button class="primary" onclick="publishAdminAnnouncement()">Publish Announcement</button></div><div class="card"><h3>Published announcements</h3><div id="adminAnnList">${announcements.map(a=>`<div class="listrow"><div><b>${esc(a.title)}</b><div class="muted" style="font-size:12px">${esc(a.sub)}</div></div><span class="badge">${esc(a.audience)}</span></div>`).join('')}</div></div></div>`}
+function publishAdminAnnouncement(){let t=document.getElementById('annTitle').value.trim(),b=document.getElementById('annBody').value.trim(),a=document.getElementById('annAudience').value;if(!t||!b){toast('Enter a title and message.');return}announcements.unshift({title:t,sub:b,audience:a});document.getElementById('adminAnnList').insertAdjacentHTML('afterbegin',`<div class="listrow"><div><b>${esc(t)}</b><div class="muted" style="font-size:12px">${esc(b)}</div></div><span class="badge">${esc(a)}</span></div>`);toast('Demo announcement published.')}
+function adminLibrary(search=''){return `${header('School Library Management','Publish books, capstone abstracts, and references with access controls.')}<div class="grid2"><div class="card"><h3>Add library resource</h3><div class="field"><label>Title</label><input id="libTitle" placeholder="Book or capstone title"></div><div class="field"><label>Type</label><select id="libType"><option>Book</option><option>Capstone</option><option>Research</option><option>Guide</option><option>Document</option></select></div><div class="field"><label>Abstract / description</label><textarea id="libDesc" placeholder="Enter abstract or short description"></textarea></div><div class="field"><label>Who can access it?</label><select id="libAudience"><option>Public</option><option>Student</option><option>Teacher</option></select></div><button class="primary" onclick="addLibrary()">Publish Resource</button></div><div><div class="field"><label>Search resources</label><input value="${esc(search)}" placeholder="Search title or topic" oninput="renderLibrarySearch(this.value,'admin')"></div><div id="publicLibraryResults" class="cards" style="grid-template-columns:1fr">${libraryCardsAdmin(search)}</div></div></div>`}
+function libraryCardsAdmin(q=''){let list=libraryItems.filter(x=>(`${x.title} ${x.desc} ${x.type}`).toLowerCase().includes(q.toLowerCase()));return list.length?list.map(x=>`<article class="card"><h3>${esc(x.title)}</h3><p>${esc(x.desc)}</p><div class="cardfoot"><span class="badge">${esc(x.audience)}</span><button class="link" onclick="toast('Sample resource details opened.')">View</button></div></article>`).join(''):'<div class="card empty">No resources found.</div>'}
+function addLibrary(){let t=document.getElementById('libTitle').value.trim(),d=document.getElementById('libDesc').value.trim(),type=document.getElementById('libType').value,a=document.getElementById('libAudience').value;if(!t||!d){toast('Enter a title and description.');return}libraryItems.unshift({title:t,desc:d,type,audience:a});document.getElementById('libTitle').value='';document.getElementById('libDesc').value='';document.getElementById('publicLibraryResults').innerHTML=libraryCardsAdmin();toast('Demo library resource published.')}
+function renderLibrarySearch(q,aud){let target=document.getElementById('publicLibraryResults');if(!target)return;target.innerHTML=aud==='admin'?libraryCardsAdmin(q):libraryCards(q,aud)}
+function updateRequest(sel){let cell=sel.closest('tr').querySelector('.statusCell');let v=sel.value;cell.innerHTML=`<span class="badge ${v==='For Release'?'release':v==='Released'?'':'pending'}">${v}</span>`;toast('Request status updated in this demo.')}
+render();
+    </script>
+</body>
+
+</html>
